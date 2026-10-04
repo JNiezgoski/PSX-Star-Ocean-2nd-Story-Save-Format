@@ -1,4 +1,4 @@
-"""Unit and regression tests for Task BR: SO2 Save-file 7,048-Byte Map and Coverage."""
+"""Unit and regression tests for the SO2 save-file 7,048-byte map and coverage."""
 
 import json
 from pathlib import Path
