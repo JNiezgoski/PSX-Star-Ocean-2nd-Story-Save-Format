@@ -332,7 +332,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} EXP, Level, HP/MP & Core Stats",
             "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
-            "source": "docs/SAVE-FORMAT.md, Task BP findings"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 2,
@@ -398,7 +398,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Equipment (7 Slots)",
             "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
-            "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
