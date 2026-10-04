@@ -1,9 +1,8 @@
-"""SO2's zero-run save-body codec: decode()/encode() the compression the game
+﻿"""SO2's zero-run save-body codec: decode()/encode() the compression the game
 uses inside a save block, plus state() to pull the decoded body out of a raw
 block and verify its length/checksums line up.
 
-See docs/SO2-FOL-INVESTIGATION.md for the game-code evidence (this is where
-the codec was first reverse-engineered, hence the doc name) and limitations.
+See docs/SAVE-FORMAT.md for the full byte-level reference and limitations.
 """
 import os
 import sys

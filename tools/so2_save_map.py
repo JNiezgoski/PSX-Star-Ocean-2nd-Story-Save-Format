@@ -1,4 +1,4 @@
-"""Exhaustive byte-range map and coverage auditor for the 7,048-byte SO2 save state.
+﻿"""Exhaustive byte-range map and coverage auditor for the 7,048-byte SO2 save state.
 
 Implements Task BR requirements:
 1. Produces an exact byte-range map across all 7,048 decoded bytes (0x0000..0x1B88).
@@ -35,7 +35,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Controller Button Bitmasks",
         "description": "8 x uint16 button assignments (Cross, Circle, Triangle, Square, Down, Left, Select, Start)",
-        "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -45,7 +45,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Game Clock Time Word",
         "description": "Cumulative playtime counter word derived from hardware timer",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -55,7 +55,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Operational Counter A",
         "description": "Runtime operational event counter",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -65,7 +65,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Fol",
         "description": "Party currency (uint32 little-endian, max 999,999,999)",
-        "source": "docs/SO2-FOL-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -75,7 +75,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Total Battles Won Counter",
         "description": "uint32 cumulative battles won counter (read via resident script getter 0x80067788)",
-        "source": "resident.asm 0x8006777C..0x80067790, docs/SO2-CHUNK1-MAPPING.md"
+        "source": "resident.asm 0x8006777C..0x80067790, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -95,7 +95,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Save Preparation Counter",
         "description": "Incremented each time the save screen is invoked",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -115,7 +115,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Companion Counter Delimiter Byte",
         "description": "Null delimiter byte (0x00) following menu operation counter",
-        "source": "resident.asm 0x80067734, docs/SO2-CHUNK1-MAPPING.md"
+        "source": "resident.asm 0x80067734, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -125,7 +125,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Specialty Secondary Operation Counter",
         "description": "uint32 secondary companion operation counter (read via resident script getter 0x80067870)",
-        "source": "resident.asm 0x80067864..0x80067874, docs/SO2-CHUNK1-MAPPING.md"
+        "source": "resident.asm 0x80067864..0x80067874, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -135,7 +135,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Window Corner Colors",
         "description": "4 x uint32 window gradient corners (UL, UR, LL, LR; 0x00BBGGRR)",
-        "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -145,7 +145,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Party Selector Flags",
         "description": "Active party member selection flags",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -155,7 +155,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Non-Default Name Booleans",
         "description": "Booleans for Claude (0x42) and Rena (0x43) indicating custom player-assigned names",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -165,7 +165,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Audio / Video / Gameplay Options",
         "description": "Sound mode (0x44), Route selector (0x45), Vibration (0x46), Window style (0x47..0x48), Targeting (0x49), Camera (0x4A), Motion (0x4B), Disc ID (0x4C)",
-        "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md, docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -175,7 +175,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Global Link Combo Mode Active Flag",
         "description": "Boolean flag indicating Link Combo mode active on any party member (written at resident.asm 0x8003197C)",
-        "source": "resident.asm 0x8003197C, docs/SO2-CHUNK1-MAPPING.md"
+        "source": "resident.asm 0x8003197C, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -185,7 +185,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Scripted System Milestone Flag",
         "description": "Boolean milestone flag written by script VM opcode 279 (written at resident.asm 0x80067B34)",
-        "source": "resident.asm 0x80067B34, docs/SO2-CHUNK1-MAPPING.md"
+        "source": "resident.asm 0x80067B34, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -195,7 +195,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Natural Word Alignment Zero Pad",
         "description": "Alignment zero padding (0x00) aligning structure to 4-byte boundary before 32-bit timestamp word",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -218,7 +218,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Clock Throttle / Timer Word",
         "description": "Frame/timing sync word",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -228,7 +228,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Friendship Relationship Matrix",
         "description": "12 x 12 character emotional level matrix (friendship values 0..15 per pair)",
-        "source": "docs/SO2-CHUNK1-MAPPING.md, tools/so2_chunk1_evidence.py"
+        "source": "docs/SAVE-FORMAT.md, tools/so2_chunk1_evidence.py"
     })
     ranges.append({
         "chunk": 1,
@@ -238,7 +238,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Romance / Affection Relationship Matrix",
         "description": "12 x 12 character emotional level matrix (romance/affection values 0..15 per pair)",
-        "source": "docs/SO2-CHUNK1-MAPPING.md, tools/so2_chunk1_evidence.py"
+        "source": "docs/SAVE-FORMAT.md, tools/so2_chunk1_evidence.py"
     })
     ranges.append({
         "chunk": 1,
@@ -248,7 +248,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Game Completion Code",
         "description": "Cleared game / voice collection unlocked marker word",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -258,7 +258,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Modifier Prefix Alignment Pad",
         "description": "8-byte structural zero padding flanking game completion code and stat multipliers; 100% verified zeroes across all saves",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -278,7 +278,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Modifier Trailing Alignment Pad",
         "description": "16-byte structural zero padding flanking stat multipliers and save menu selection words; 100% verified zeroes across all saves",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 1,
@@ -288,7 +288,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Save Menu Selection State",
         "description": "Last selected slot indices and UI cursor positions",
-        "source": "docs/SO2-CHUNK1-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
 
     # =========================================================================
@@ -304,7 +304,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} ID & Condition Flags",
             "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
-            "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 2,
@@ -314,7 +314,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Elemental Damage Resistances",
             "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
-            "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+            "source": "combat.asm 0x80081878..0x80081890, docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 2,
@@ -324,7 +324,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Status Ailment Protection Mask",
             "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
-            "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+            "source": "combat.asm 0x80081878..0x80081890, docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 2,
@@ -334,7 +334,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} EXP, Level, HP/MP & Core Stats",
             "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
-            "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+            "source": "docs/SAVE-FORMAT.md, Task BP findings"
         })
         ranges.append({
             "chunk": 2,
@@ -354,7 +354,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Critical Hit Rate Bonus (CRT %)",
             "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
-            "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+            "source": "combat.asm 0x80081854..0x80081870, docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 2,
@@ -364,7 +364,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Weapon Elemental Attack Mask",
             "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
-            "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+            "source": "combat.asm 0x80081868..0x80081874, docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 2,
@@ -374,7 +374,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Combat State Flags",
             "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
-            "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+            "source": "combat.asm 0x80081728..0x800818D8, docs/SAVE-FORMAT.md"
         })
 
     # =========================================================================
@@ -390,7 +390,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Extended Stats (LUC & STM)",
             "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
-            "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
@@ -420,7 +420,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} SP-to-Talent Alignment Padding",
             "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+            "source": "docs/SAVE-FORMAT.md, resident.asm 0x8007A240"
         })
         ranges.append({
             "chunk": 3,
@@ -450,7 +450,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Combat Stance & Tactical Configuration",
             "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+            "source": "docs/SAVE-FORMAT.md, code-3004.asm 0x80081B30..0x80081C3C"
         })
         ranges.append({
             "chunk": 3,
@@ -460,7 +460,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Known / Unlocked Ability Flags",
             "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
@@ -470,7 +470,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Skill Table Delimiter",
             "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
@@ -480,7 +480,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Specialty Skill Levels",
             "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
@@ -490,7 +490,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Proficiency Table Alignment Pad",
             "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
@@ -500,7 +500,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Ability Proficiencies & Spell Counters",
             "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+            "source": "docs/SAVE-FORMAT.md"
         })
         ranges.append({
             "chunk": 3,
@@ -510,7 +510,7 @@ def generate_byte_map():
             "status": "VERIFIED",
             "name": f"Slot {slot} Equipped Killer Move Shortcuts",
             "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
-            "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+            "source": "docs/SAVE-FORMAT.md"
         })
 
     # =========================================================================
@@ -524,7 +524,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Inventory Roster Array",
         "description": "1,024 x uint16 item slots: bits 0..9 item ID, bits 10..14 count (max 20), bit 15 seen/new flag",
-        "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 4,
@@ -534,7 +534,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Recent Acquired Item IDs",
         "description": "16 x uint16 tracking recent item acquisitions",
-        "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 4,
@@ -544,7 +544,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Inventory Buffer Control Word",
         "description": "Memory buffer allocation descriptor",
-        "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 4,
@@ -564,7 +564,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Inventory Trailing Alignment",
         "description": "Padding word to complete 0xC28 allocation",
-        "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
 
     # =========================================================================
@@ -578,7 +578,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Warp / Scene Transition Header",
         "description": "Scene transition dispatch and return linkage parameters",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -588,7 +588,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Saved Location Coordinates",
         "description": "Signed 32-bit world/dungeon entrance coordinates: X (+0), Y (+4), Z (+8)",
-        "source": "docs/SO2-MAP-LOCATION-CHECK.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -598,7 +598,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Camera Elevation",
         "description": "Sub-area camera angle and elevation offset",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -608,7 +608,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Party Facing Angle",
         "description": "Orientation angle (uint16)",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -618,7 +618,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Psynard Mount Active Bank",
         "description": "Selects active parked mount coordinate bank (0 or 1)",
-        "source": "docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -628,7 +628,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Resource / Sequence Selector",
         "description": "Field sequence and transition resource selector (signed int16, -1 sentinel)",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -638,7 +638,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Saved Scene-View Parameter",
         "description": "Signed halfword scene-view angle parameter (written at resident.asm 0x80054400, 0x80063A10; read at 0x80055830)",
-        "source": "resident.asm 0x80054400, 0x80055830, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80054400, 0x80055830, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -648,7 +648,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Overworld Minimap View Mode",
         "description": "Overworld minimap / radar / full map display mode (uint8 0..2 cyclic toggle; overworld.asm 0x800889A4..0x800889CC)",
-        "source": "overworld.asm 0x800889A4..0x800889CC, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "overworld.asm 0x800889A4..0x800889CC, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -658,7 +658,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Sub-Area Index",
         "description": "Interior sub-area room index",
-        "source": "docs/SO2-MAP-LOCATION-CHECK.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -668,7 +668,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Zero Alignment Halfword",
         "description": "Zero-initialized alignment halfword (0x0000) preceding actor index (initialized at resident.asm 0x8005EC60)",
-        "source": "resident.asm 0x8005EC60, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8005EC60, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -678,7 +678,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Landmark / Area ID",
         "description": "Current landmark index (0..193; e.g. Area 128 = Linga)",
-        "source": "docs/SO2-MAP-LOCATION-CHECK.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -688,7 +688,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Controlled-Object / Leader Active Flag",
         "description": "Leader object readiness flag (0 or 1; written at resident.asm 0x800540E8, 0x80054108; read at 0x800558BC)",
-        "source": "resident.asm 0x800540E8, 0x800558BC, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x800540E8, 0x800558BC, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -698,7 +698,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Scene Movement Lock Flag",
         "description": "Cutscene / movement lock flag (written at resident.asm 0x8006378C, cleared at 0x80055878, tested at 0x8004C9D0)",
-        "source": "resident.asm 0x8006378C, 0x80055878, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8006378C, 0x80055878, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -708,7 +708,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Pending Scene Action Trigger Flag",
         "description": "Interactive field transition trigger flag (written at resident.asm 0x800525EC, cleared at 0x80054334)",
-        "source": "resident.asm 0x800525EC, 0x80054334, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x800525EC, 0x80054334, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -718,7 +718,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Character Name Table",
         "description": "12 characters x 20 bytes each: saved character names and status display labels",
-        "source": "docs/SO2-CHUNK5-MAPPING.md, resident.asm 0x80055f78"
+        "source": "docs/SAVE-FORMAT.md, resident.asm 0x80055f78"
     })
     ranges.append({
         "chunk": 5,
@@ -728,7 +728,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Message Speed",
         "description": "Text display speed (uint8 0..7, displayed 1..8 in options menu)",
-        "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -738,7 +738,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Field Scene Viewport & Camera State Registers",
         "description": "Field camera parameters, viewpoint angle, and viewport scroll limits (initialized at resident.asm 0x80058FC0, 0x8005904C, 0x800590E4)",
-        "source": "resident.asm 0x80058FC0, 0x800590E4, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80058FC0, 0x800590E4, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -748,7 +748,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Area / Room Transition Target ID",
         "description": "Target room/landmark entrance index (uint8; written at resident.asm 0x80059078, verified across saves 0x83..0xF6)",
-        "source": "resident.asm 0x80059078, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80059078, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -758,7 +758,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Field Environment State Registers",
         "description": "Field scene environment parameters and transition state scratch registers (resident.asm 0x80058FC0)",
-        "source": "resident.asm 0x80058FC0, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80058FC0, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -768,7 +768,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Cutscene Progress & Event Dispatch Markers",
         "description": "5 x uint16 scene cutscene progress IDs (written at resident.asm 0x80058FFC, 0x80059000, verified across saves)",
-        "source": "resident.asm 0x80058FC0, 0x80058FFC, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80058FC0, 0x80058FFC, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -778,7 +778,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Event Dispatch Scratch & Transition Registers",
         "description": "Field event dispatch countdown scratch registers and transition parameters preceding clock snapshots (resident.asm 0x80058FC0)",
-        "source": "resident.asm 0x80058FC0, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80058FC0, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -788,7 +788,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Game Clock Snapshots",
         "description": "48 x uint32 clock snapshot timestamps recording in-game milestones",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -798,7 +798,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Operational Milestone Parameter",
         "description": "uint32 milestone parameter preceding completion counter (verified in real saves; resident.asm 0x80048C14)",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -808,7 +808,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Completion Counter",
         "description": "uint32 completion counter incremented when chunk-1 halfword +178 equals 1 (read/written at resident.asm 0x80048C30..0x80048C3C; script getter 0x8006776C)",
-        "source": "resident.asm 0x80048C30..0x80048C3C, 0x8006776C, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80048C30..0x80048C3C, 0x8006776C, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -818,7 +818,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Script-Additive Counter",
         "description": "uint16 script-additive counter (read at resident.asm 0x800676A0, 0x800676C4)",
-        "source": "resident.asm 0x80067688..0x800676CC, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80067688..0x800676CC, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -828,7 +828,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Script RNG Test Attempt Counter",
         "description": "uint16 attempt counter for script RNG tests (read/written at resident.asm 0x80066604, 0x80066614; script getter 0x800676E0)",
-        "source": "resident.asm 0x8006659C..0x80066618, 0x800676E0, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8006659C..0x80066618, 0x800676E0, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -838,7 +838,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Script RNG Test Success Counter",
         "description": "uint16 success counter for script RNG tests (read at resident.asm 0x80066630; script getter 0x800676FC)",
-        "source": "resident.asm 0x80066618..0x80066640, 0x800676FC, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80066618..0x80066640, 0x800676FC, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -848,7 +848,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Delivery Array Alignment Halfword",
         "description": "Alignment halfword preceding 10-element pending delivery array (initialized at resident.asm 0x8005ED2C)",
-        "source": "resident.asm 0x8005ED2C, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8005ED2C, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -858,7 +858,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Pending Item Deliveries",
         "description": "10 x uint16 slots tracking delayed item deliveries (e.g. publication royalties, forging)",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -868,7 +868,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Menu Return Request Code",
         "description": "Signed halfword menu request code (read at resident.asm 0x8003055C, 0x80050D0C; set at 0x80032180)",
-        "source": "resident.asm 0x8003055C, 0x80032180, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8003055C, 0x80032180, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -878,7 +878,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Menu Return Modifiers",
         "description": "Two signed 8-bit menu modifiers (read at resident.asm 0x8004D47C, 0x8004D480)",
-        "source": "resident.asm 0x8004D47C, 0x8004D480, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8004D47C, 0x8004D480, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -888,7 +888,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Object-14 Saved X Coordinate",
         "description": "Signed 32-bit X coordinate for persistent object 14 (written at resident.asm 0x80068320; read at 0x800557AC)",
-        "source": "resident.asm 0x800557AC, 0x80068320, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x800557AC, 0x80068320, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -898,7 +898,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Psynard Parked Coordinates",
         "description": "Two saved XYZ banks: Bank 1 at 0x19B4/0x19D4/0x19B8, Bank 2 at 0x19BC/0x19D8/0x19C0",
-        "source": "docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -908,7 +908,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Saved Active Party Character IDs",
         "description": "8 x uint8 character IDs in current active party roster",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -918,7 +918,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Menu Delivery Variant Selector",
         "description": "Delivery variant mode byte (read at resident.asm 0x8004CC24, 0x8004E2B8, 0x80050280)",
-        "source": "resident.asm 0x8004CC24, 0x80050280, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x8004CC24, 0x80050280, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -928,7 +928,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Delivery Variant Alignment Pad",
         "description": "Structural alignment pad byte (verified 100% all-zeroes across saves)",
-        "source": "docs/SO2-CHUNK5-MAPPING.md"
+        "source": "docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -938,7 +938,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Object-14 Saved Orientation",
         "description": "Signed halfword orientation parameter for object 14 (read at resident.asm 0x800557D0; written at 0x80068344)",
-        "source": "resident.asm 0x800557D0, 0x80068344, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x800557D0, 0x80068344, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -948,7 +948,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Psynard Parked Y Coordinates",
         "description": "Signed 32-bit Y coordinates for Psynard parking bank 1 (0x19D4) and bank 2 (0x19D8) (written at resident.asm 0x8004C774, 0x8004C7A4; read at 0x80054454, 0x80055684)",
-        "source": "resident.asm 0x8004C774, 0x80054454, docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+        "source": "resident.asm 0x8004C774, 0x80054454, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -958,7 +958,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Deferred Delivery Clock Marker",
         "description": "uint32 clock marker gating deferred delivery processing (written at resident.asm 0x80030580, 0x80050C20; read at 0x80030570, 0x8004CBE4)",
-        "source": "resident.asm 0x80030570..0x80030584, 0x8004CBE4, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x80030570..0x80030584, 0x8004CBE4, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -968,7 +968,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Object-14 Saved Y and Z Coordinates",
         "description": "Signed 32-bit Y (0x19E0) and Z (0x19E4) coordinates for object 14 (written at resident.asm 0x8006832C, 0x80068338; read at 0x800557B8, 0x800557C4)",
-        "source": "resident.asm 0x800557B8..0x800557C4, 0x8006832C, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x800557B8..0x800557C4, 0x8006832C, docs/SAVE-FORMAT.md"
     })
     ranges.append({
         "chunk": 5,
@@ -978,7 +978,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Global Story / Event Flag Bitfield",
         "description": "368 bytes (2,944 flags) from live buffer G=[0x80075704]; read/set/clear via 0x80055ECC/0x80055EFC/0x80055F38. 346 individual flag bits now definitively resolved: 338 real treasure chests at flags 2400..2730 (0x1B14..0x1B3D, 42 bytes), Cross Cave altar cutscene flag 449 at 0x1A20, Precious/Key item flags 0x02B4..0x02E3 at 0x1A3E..0x1A44, and developer debug flags 0x02C8..0x02D7 at 0x1A41..0x1A42.",
-        "source": "docs/SO2-CHUNK5-MAPPING.md, artifacts/so2-objects/master_chest_database.json, tools/so2_chunk5_evidence.py"
+        "source": "docs/SAVE-FORMAT.md, artifacts/so2-objects/master_chest_database.json, tools/so2_chunk5_evidence.py"
     })
     ranges.append({
         "chunk": 5,
@@ -988,7 +988,7 @@ def generate_byte_map():
         "status": "VERIFIED",
         "name": "Resource-E Trailing Buffer Padding",
         "description": "48-byte trailing buffer padding beyond 0x410 active bytes of F and G; allocated via malloc(0x440) at resident.asm 0x800325F0; snapshot 0x80055FC8 and restore 0x8005EAA0 bounded strictly to 0x410; contains zero pad or heap residue",
-        "source": "resident.asm 0x800325F0, 0x80055FC8, 0x8005EAA0, docs/SO2-CHUNK5-MAPPING.md"
+        "source": "resident.asm 0x800325F0, 0x80055FC8, 0x8005EAA0, docs/SAVE-FORMAT.md"
     })
 
     return ranges
@@ -1084,7 +1084,7 @@ def audit_coverage(ranges):
             {
                 "region": "Chunk 3 (+0x3C..+0xD0, 148 bytes per character)",
                 "hypothesis": "Combat special attack proficiency, spell usage counters, and ability unlocks",
-                "proposed_action": "Resolved via Task DF: controlled Healing Star live test (+1 at +0x8C) and disc code confirmed 32 known flags (+0x3C..+0x5C), 46 skill levels (+0x5D..+0x8B), 32 uint16 proficiencies (+0x8C..+0xCB), and 4 equipped shortcuts (+0xCC..+0xD0).",
+                
                 "status": "VERIFIED"
             },
             {
