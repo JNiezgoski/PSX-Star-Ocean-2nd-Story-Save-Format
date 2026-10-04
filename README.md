@@ -17,8 +17,6 @@ A complete, byte-level reverse-engineered reference for the *Star Ocean: The Sec
 
 ```python
 import sys
-sys.path.insert(0, ".")
-import saveconv
 sys.path.insert(0, "scripts")
 import so2_codec
 

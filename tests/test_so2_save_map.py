@@ -11,7 +11,6 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 import so2_save_map
-import saveconv
 import so2_codec
 
 

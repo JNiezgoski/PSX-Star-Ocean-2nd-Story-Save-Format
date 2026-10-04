@@ -4,15 +4,15 @@ block and verify its length/checksums line up.
 
 See docs/SAVE-FORMAT.md for the full byte-level reference and limitations.
 """
-import os
-import sys
 import struct
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import saveconv
-
+BLOCK = 8192
 STREAM = 0x380
 STATE_SIZE = 0x1B88
+
+
+class SaveError(Exception):
+    pass
 
 
 def decode(encoded, limit=STATE_SIZE):
@@ -26,12 +26,12 @@ def decode(encoded, limit=STATE_SIZE):
         zeros = zeros + 1 if value == 0 else 0
         if zeros == 2:
             if pos == len(encoded):
-                raise saveconv.SaveError('truncated zero-run token')
+                raise SaveError('truncated zero-run token')
             out.extend(bytes(encoded[pos]))
             pos += 1
             zeros = 0
         if len(out) > limit:
-            raise saveconv.SaveError('decoded state exceeds expected size')
+            raise SaveError('decoded state exceeds expected size')
     return bytes(out)
 
 
@@ -54,13 +54,13 @@ def encode(decoded):
 
 
 def state(block):
-    if len(block) != saveconv.BLOCK or block[0x200:0x20A] != b'STAR OCEAN':
-        raise saveconv.SaveError('expected a single-block SO2 save')
+    if len(block) != BLOCK or block[0x200:0x20A] != b'STAR OCEAN':
+        raise SaveError('expected a single-block SO2 save')
     end = struct.unpack_from('<H', block, 0x21A)[0]
     count = struct.unpack_from('<H', block, STREAM)[0]
     if end != STREAM + 2 + count or end > len(block):
-        raise saveconv.SaveError('inconsistent compressed length / C')
+        raise SaveError('inconsistent compressed length / C')
     decoded = decode(block[STREAM + 2:end])
     if len(decoded) != STATE_SIZE:
-        raise saveconv.SaveError(f'unexpected decoded size: {len(decoded):#x}')
+        raise SaveError(f'unexpected decoded size: {len(decoded):#x}')
     return decoded

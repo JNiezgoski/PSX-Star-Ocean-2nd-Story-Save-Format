@@ -1,6 +1,5 @@
 ﻿"""Exhaustive byte-range map and coverage auditor for the 7,048-byte SO2 save state.
 
-Implements Task BR requirements:
 1. Produces an exact byte-range map across all 7,048 decoded bytes (0x0000..0x1B88).
 2. Distinguishes confirmed/verified fields from unknown/opaque ranges.
 3. Documents controlled diff test candidates and resolves the empty-armor edge case.
@@ -15,7 +14,6 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
-import saveconv
 import so2_codec
 
 STATE_SIZE = 0x1B88  # 7,048 bytes
