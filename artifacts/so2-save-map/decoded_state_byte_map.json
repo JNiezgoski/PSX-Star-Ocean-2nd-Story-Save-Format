@@ -1,0 +1,2526 @@
+{
+  "total_bytes": 7048,
+  "confirmed_mapped_bytes": 7048,
+  "confirmed_mapped_percentage": 100.0,
+  "unknown_bytes": 0,
+  "unknown_percentage": 0.0,
+  "chunks": [
+    {
+      "chunk_number": 1,
+      "name": "Options / Fol / Affection (Resource 2)",
+      "live_pointer": "[0x80075270]",
+      "start_offset": 0,
+      "end_offset": 416,
+      "total_bytes": 416,
+      "mapped_bytes": 416,
+      "mapped_percentage": 100.0,
+      "unknown_bytes": 0,
+      "primary_contents": "Button bitmasks, Game clock, Fol, Battles won counter, Options, Window colors, Friendship & Romance 12x12 matrices, HP/MP multipliers"
+    },
+    {
+      "chunk_number": 2,
+      "name": "Party Primary Record Array (8 Slots x 96B)",
+      "live_pointer": "[0x8007527C]",
+      "start_offset": 416,
+      "end_offset": 1184,
+      "total_bytes": 768,
+      "mapped_bytes": 768,
+      "mapped_percentage": 100.0,
+      "unknown_bytes": 0,
+      "primary_contents": "Signed ID, status conditions, 10 elemental resistances, status protection mask, EXP, HP/MP triplets, Level, STR/CON/AGL/DEX/INT/GUTS triplets, Attribute triplets A/B, CRT bonus, Weapon element mask, Combat state flags"
+    },
+    {
+      "chunk_number": 3,
+      "name": "Party Secondary Record Array (8 Slots x 208B)",
+      "live_pointer": "[0x80075280]",
+      "start_offset": 1184,
+      "end_offset": 2848,
+      "total_bytes": 1664,
+      "mapped_bytes": 1664,
+      "mapped_percentage": 100.0,
+      "unknown_bytes": 0,
+      "primary_contents": "LUC/STM triplets, 7 equipment slots (weapon/armor/shield/helm/greaves/acc1/acc2), SP, Talents, Names (16B), Combat stance/LC flags, 32 known ability flags, 46 specialty skill levels, 32 ability proficiencies/spell counters (64B), 4 equipped KM shortcuts"
+    },
+    {
+      "chunk_number": 4,
+      "name": "Inventory Roster & Integrity Buffer",
+      "live_pointer": "[0x80075278]",
+      "start_offset": 2848,
+      "end_offset": 5960,
+      "total_bytes": 3112,
+      "mapped_bytes": 3112,
+      "mapped_percentage": 100.0,
+      "unknown_bytes": 0,
+      "primary_contents": "1,024 x 16-bit item slots, 16 recent item IDs, 1,024 hash/integrity bytes"
+    },
+    {
+      "chunk_number": 5,
+      "name": "World Entrance Coordinates, Name Table & Story Flags",
+      "live_pointer": "Resource 0xE (F=[0x80075710] + G=[0x80075704])",
+      "start_offset": 5960,
+      "end_offset": 7048,
+      "total_bytes": 1088,
+      "mapped_bytes": 1088,
+      "mapped_percentage": 100.0,
+      "unknown_bytes": 0,
+      "primary_contents": "Saved XYZ coordinates, Area ID, 12x20B Name Table, Message speed, 48 Clock snapshots, 10 Pending items, Psynard coordinates, 2,944 Global story flags (including 338 treasure chests at 0x1B14..0x1B3D)",
+      "semantic_mapped_bytes": 581,
+      "semantic_mapped_percentage": 53.4
+    }
+  ],
+  "global_flags_summary": {
+    "total_flags": 2944,
+    "total_bytes": 368,
+    "start_offset": 6632,
+    "end_offset": 7000,
+    "individually_resolved_flag_bits": 346,
+    "chest_flags_count": 338,
+    "unique_chest_flag_ids": 313,
+    "chest_flag_range": "2400..2730",
+    "chest_flag_decoded_bytes": "0x1B14..0x1B3D (42 bytes)",
+    "story_milestone_flags_count": 1,
+    "precious_key_item_flags_count": 48,
+    "developer_debug_flags_count": 16,
+    "semantic_flags_bytes_accounted": 141,
+    "semantic_flags_percentage": 38.32,
+    "proven_silent_padding_bytes": 227,
+    "unresolved_flags_count": 2598,
+    "chunk5_semantic_mapped_bytes": 581,
+    "chunk5_semantic_percentage": 53.4
+  },
+  "empty_armor_slot_resolution": {
+    "finding": "Equipment in decoded secondary array sits at fixed offset +0x0C..+0x1A (7 x uint16).",
+    "resolution": "An empty armor slot is simply uint16 value 0x0000. The historical 'compressed 6-slot layout' misconception was an artifact of observing the raw zero-run compressed stream before decompression, where 00 00 collapsed into adjacent zeros."
+  },
+  "controlled_diff_test_proposals": [
+    {
+      "region": "Chunk 3 (+0x3C..+0xD0, 148 bytes per character)",
+      "hypothesis": "Combat special attack proficiency, spell usage counters, and ability unlocks",
+      "proposed_action": "Resolved via Task DF: controlled Healing Star live test (+1 at +0x8C) and disc code confirmed 32 known flags (+0x3C..+0x5C), 46 skill levels (+0x5D..+0x8B), 32 uint16 proficiencies (+0x8C..+0xCB), and 4 equipped shortcuts (+0xCC..+0xD0).",
+      "status": "VERIFIED"
+    },
+    {
+      "region": "Chunk 5 (0x19E8..0x1B58, Global flags)",
+      "hypothesis": "Story progression / quest flag activation",
+      "proposed_action": "Resolved: G buffer event flags decoded; all 338 treasure chest flags proven at 2400..2730 (0x1B14..0x1B3D), Cross Cave altar flag at 449 (0x1A20), and Precious items at 0x1A3E..0x1A44.",
+      "status": "VERIFIED"
+    },
+    {
+      "region": "Chunk 1 (0x58..0x178, 12x12 matrices)",
+      "hypothesis": "Private Action emotion level modifications",
+      "proposed_action": "Trigger a single known PA that awards positive relationship points (e.g. Rena PA in Arlia) and inspect which 0..15 cell increments."
+    }
+  ],
+  "ranges": [
+    {
+      "chunk": 1,
+      "start": 0,
+      "end": 16,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Controller Button Bitmasks",
+      "description": "8 x uint16 button assignments (Cross, Circle, Triangle, Square, Down, Left, Select, Start)",
+      "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md"
+    },
+    {
+      "chunk": 1,
+      "start": 16,
+      "end": 20,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Game Clock Time Word",
+      "description": "Cumulative playtime counter word derived from hardware timer",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 20,
+      "end": 24,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Operational Counter A",
+      "description": "Runtime operational event counter",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 24,
+      "end": 28,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Fol",
+      "description": "Party currency (uint32 little-endian, max 999,999,999)",
+      "source": "docs/SO2-FOL-INVESTIGATION.md"
+    },
+    {
+      "chunk": 1,
+      "start": 28,
+      "end": 32,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Total Battles Won Counter",
+      "description": "uint32 cumulative battles won counter (read via resident script getter 0x80067788)",
+      "source": "resident.asm 0x8006777C..0x80067790, docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 32,
+      "end": 36,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Save Counter A",
+      "description": "Total in-game save action counter",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 1,
+      "start": 36,
+      "end": 40,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Save Preparation Counter",
+      "description": "Incremented each time the save screen is invoked",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 40,
+      "end": 43,
+      "size": 3,
+      "status": "VERIFIED",
+      "name": "Save Counter B",
+      "description": "Secondary save confirmation counter",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 1,
+      "start": 43,
+      "end": 44,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Companion Counter Delimiter Byte",
+      "description": "Null delimiter byte (0x00) following menu operation counter",
+      "source": "resident.asm 0x80067734, docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 44,
+      "end": 48,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Specialty Secondary Operation Counter",
+      "description": "uint32 secondary companion operation counter (read via resident script getter 0x80067870)",
+      "source": "resident.asm 0x80067864..0x80067874, docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 48,
+      "end": 64,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Window Corner Colors",
+      "description": "4 x uint32 window gradient corners (UL, UR, LL, LR; 0x00BBGGRR)",
+      "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md"
+    },
+    {
+      "chunk": 1,
+      "start": 64,
+      "end": 66,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Party Selector Flags",
+      "description": "Active party member selection flags",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 66,
+      "end": 68,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Non-Default Name Booleans",
+      "description": "Booleans for Claude (0x42) and Rena (0x43) indicating custom player-assigned names",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 68,
+      "end": 77,
+      "size": 9,
+      "status": "VERIFIED",
+      "name": "Audio / Video / Gameplay Options",
+      "description": "Sound mode (0x44), Route selector (0x45), Vibration (0x46), Window style (0x47..0x48), Targeting (0x49), Camera (0x4A), Motion (0x4B), Disc ID (0x4C)",
+      "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md, docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+    },
+    {
+      "chunk": 1,
+      "start": 77,
+      "end": 78,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Global Link Combo Mode Active Flag",
+      "description": "Boolean flag indicating Link Combo mode active on any party member (written at resident.asm 0x8003197C)",
+      "source": "resident.asm 0x8003197C, docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 78,
+      "end": 79,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Scripted System Milestone Flag",
+      "description": "Boolean milestone flag written by script VM opcode 279 (written at resident.asm 0x80067B34)",
+      "source": "resident.asm 0x80067B34, docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 79,
+      "end": 80,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Natural Word Alignment Zero Pad",
+      "description": "Alignment zero padding (0x00) aligning structure to 4-byte boundary before 32-bit timestamp word",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 80,
+      "end": 84,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Voice Collection 64-Word Rolling Integrity Hash",
+      "description": "32-bit rolling integrity hash over the 64 words (256 bytes) of the Voice Collection buffer at S+0x01A0..0x02A0. Formula: v1 = (~v1 + word) mod 2^32 across all 64 words, little-endian. Written via `sw $v1, 0x50($v0)` at 0x8007F604 inside the boss-combat overlay (Disc 2 Archive 1984). Recomputed and verified whenever a new voice line is unlocked.",
+      "source": "Disc 2 Archive 1984, offset 0x8007F604"
+    },
+    {
+      "chunk": 1,
+      "start": 84,
+      "end": 88,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Clock Throttle / Timer Word",
+      "description": "Frame/timing sync word",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 88,
+      "end": 232,
+      "size": 144,
+      "status": "VERIFIED",
+      "name": "Friendship Relationship Matrix",
+      "description": "12 x 12 character emotional level matrix (friendship values 0..15 per pair)",
+      "source": "docs/SO2-CHUNK1-MAPPING.md, tools/so2_chunk1_evidence.py"
+    },
+    {
+      "chunk": 1,
+      "start": 232,
+      "end": 376,
+      "size": 144,
+      "status": "VERIFIED",
+      "name": "Romance / Affection Relationship Matrix",
+      "description": "12 x 12 character emotional level matrix (romance/affection values 0..15 per pair)",
+      "source": "docs/SO2-CHUNK1-MAPPING.md, tools/so2_chunk1_evidence.py"
+    },
+    {
+      "chunk": 1,
+      "start": 376,
+      "end": 380,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Game Completion Code",
+      "description": "Cleared game / voice collection unlocked marker word",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 380,
+      "end": 388,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Modifier Prefix Alignment Pad",
+      "description": "8-byte structural zero padding flanking game completion code and stat multipliers; 100% verified zeroes across all saves",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 388,
+      "end": 392,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "HP / MP Skill Scaling Modifiers",
+      "description": "uint16 HP percentage bonus (0x184) and uint16 MP percentage bonus (0x186)",
+      "source": "resident.asm 0x8003b560..0x8003b5bc"
+    },
+    {
+      "chunk": 1,
+      "start": 392,
+      "end": 408,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Modifier Trailing Alignment Pad",
+      "description": "16-byte structural zero padding flanking stat multipliers and save menu selection words; 100% verified zeroes across all saves",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 1,
+      "start": 408,
+      "end": 416,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Save Menu Selection State",
+      "description": "Last selected slot indices and UI cursor positions",
+      "source": "docs/SO2-CHUNK1-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 416,
+      "end": 420,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 0 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 420,
+      "end": 430,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 0 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 430,
+      "end": 432,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 0 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 432,
+      "end": 494,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 0 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 494,
+      "end": 506,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 0 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 506,
+      "end": 508,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 0 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 508,
+      "end": 510,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 0 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 510,
+      "end": 512,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 0 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 512,
+      "end": 516,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 1 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 516,
+      "end": 526,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 1 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 526,
+      "end": 528,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 1 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 528,
+      "end": 590,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 1 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 590,
+      "end": 602,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 1 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 602,
+      "end": 604,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 1 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 604,
+      "end": 606,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 1 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 606,
+      "end": 608,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 1 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 608,
+      "end": 612,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 2 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 612,
+      "end": 622,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 2 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 622,
+      "end": 624,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 2 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 624,
+      "end": 686,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 2 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 686,
+      "end": 698,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 2 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 698,
+      "end": 700,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 2 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 700,
+      "end": 702,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 2 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 702,
+      "end": 704,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 2 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 704,
+      "end": 708,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 3 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 708,
+      "end": 718,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 3 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 718,
+      "end": 720,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 3 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 720,
+      "end": 782,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 3 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 782,
+      "end": 794,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 3 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 794,
+      "end": 796,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 3 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 796,
+      "end": 798,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 3 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 798,
+      "end": 800,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 3 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 800,
+      "end": 804,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 4 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 804,
+      "end": 814,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 4 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 814,
+      "end": 816,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 4 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 816,
+      "end": 878,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 4 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 878,
+      "end": 890,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 4 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 890,
+      "end": 892,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 4 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 892,
+      "end": 894,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 4 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 894,
+      "end": 896,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 4 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 896,
+      "end": 900,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 5 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 900,
+      "end": 910,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 5 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 910,
+      "end": 912,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 5 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 912,
+      "end": 974,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 5 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 974,
+      "end": 986,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 5 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 986,
+      "end": 988,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 5 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 988,
+      "end": 990,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 5 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 990,
+      "end": 992,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 5 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 992,
+      "end": 996,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 6 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 996,
+      "end": 1006,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 6 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1006,
+      "end": 1008,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 6 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1008,
+      "end": 1070,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 6 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 1070,
+      "end": 1082,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 6 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 1082,
+      "end": 1084,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 6 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1084,
+      "end": 1086,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 6 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1086,
+      "end": 1088,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 6 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1088,
+      "end": 1092,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 7 ID & Condition Flags",
+      "description": "Signed ID (+0, int16), Status flags (+2, uint8: Dead, Paralysis, Stone, Poison), Class byte (+3)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1092,
+      "end": 1102,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Slot 7 Elemental Damage Resistances",
+      "description": "10 elemental damage resistances: Earth (+4), Water (+5), Fire (+6), Wind (+7), Thunder (+8), Star (+9), Void (+A), Light (+B), Dark (+C), Physical (+D); 0=Neutral, 1=Weak, 2=Resist, 3=Immune, 4=Absorb. Computed from gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1102,
+      "end": 1104,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 7 Status Ailment Protection Mask",
+      "description": "uint16 status protection / immunity bitmask aggregated from equipped gear via combat.asm 0x80081878..0x80081890",
+      "source": "combat.asm 0x80081878..0x80081890, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1104,
+      "end": 1166,
+      "size": 62,
+      "status": "VERIFIED",
+      "name": "Slot 7 EXP, Level, HP/MP & Core Stats",
+      "description": "EXP (+10, uint32), HP triplet (+14..+1F), MP triplet (+20..+25), Derived/Base Level (+26..+29), STR/CON/AGL/DEX/INT/GUTS triplets (+2A..+4D)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md, Task BP findings"
+    },
+    {
+      "chunk": 2,
+      "start": 1166,
+      "end": 1178,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 7 Attribute Triplets A & B",
+      "description": "Attribute triplet A (+4E..+53, init 16/15) and B (+54..+59, init 9/6/8/7), scaled in combat at 0x80081824..0x8008184C",
+      "source": "combat.asm 0x80081824..0x8008184C"
+    },
+    {
+      "chunk": 2,
+      "start": 1178,
+      "end": 1180,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 7 Critical Hit Rate Bonus (CRT %)",
+      "description": "int16 equipment critical hit rate bonus percentage summed from item property 0x1B via combat.asm 0x80081854..0x80081870",
+      "source": "combat.asm 0x80081854..0x80081870, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1180,
+      "end": 1182,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 7 Weapon Elemental Attack Mask",
+      "description": "uint16 bitmask of weapon attack elements (Water 0x02, Fire 0x04, Wind 0x08, Earth 0x10, Thunder 0x20, Star/Dark 0x40, Light 0x80) bitwise ORed via combat.asm 0x80081868..0x80081874",
+      "source": "combat.asm 0x80081868..0x80081874, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 2,
+      "start": 1182,
+      "end": 1184,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 7 Combat State Flags",
+      "description": "uint16 transient combat/battle actor state flags (0x0000 in field saves)",
+      "source": "combat.asm 0x80081728..0x800818D8, docs/SO2-CHUNK2-MAPPING.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1184,
+      "end": 1196,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 0 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1196,
+      "end": 1210,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 0 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 1210,
+      "end": 1212,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 0 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1212,
+      "end": 1216,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 0 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 1216,
+      "end": 1220,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 0 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1220,
+      "end": 1236,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 0 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1236,
+      "end": 1244,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 0 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 1244,
+      "end": 1276,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 0 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1276,
+      "end": 1277,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 0 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1277,
+      "end": 1323,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 0 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1323,
+      "end": 1324,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 0 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1324,
+      "end": 1388,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 0 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1388,
+      "end": 1392,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 0 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1392,
+      "end": 1404,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 1 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1404,
+      "end": 1418,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 1 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 1418,
+      "end": 1420,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 1 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1420,
+      "end": 1424,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 1 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 1424,
+      "end": 1428,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 1 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1428,
+      "end": 1444,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 1 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1444,
+      "end": 1452,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 1 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 1452,
+      "end": 1484,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 1 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1484,
+      "end": 1485,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 1 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1485,
+      "end": 1531,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 1 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1531,
+      "end": 1532,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 1 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1532,
+      "end": 1596,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 1 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1596,
+      "end": 1600,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 1 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1600,
+      "end": 1612,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 2 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1612,
+      "end": 1626,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 2 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 1626,
+      "end": 1628,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 2 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1628,
+      "end": 1632,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 2 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 1632,
+      "end": 1636,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 2 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1636,
+      "end": 1652,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 2 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1652,
+      "end": 1660,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 2 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 1660,
+      "end": 1692,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 2 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1692,
+      "end": 1693,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 2 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1693,
+      "end": 1739,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 2 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1739,
+      "end": 1740,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 2 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1740,
+      "end": 1804,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 2 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1804,
+      "end": 1808,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 2 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1808,
+      "end": 1820,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 3 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1820,
+      "end": 1834,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 3 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 1834,
+      "end": 1836,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 3 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1836,
+      "end": 1840,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 3 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 1840,
+      "end": 1844,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 3 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1844,
+      "end": 1860,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 3 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 1860,
+      "end": 1868,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 3 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 1868,
+      "end": 1900,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 3 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1900,
+      "end": 1901,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 3 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1901,
+      "end": 1947,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 3 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1947,
+      "end": 1948,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 3 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 1948,
+      "end": 2012,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 3 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2012,
+      "end": 2016,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 3 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2016,
+      "end": 2028,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 4 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2028,
+      "end": 2042,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 4 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 2042,
+      "end": 2044,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 4 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2044,
+      "end": 2048,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 4 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 2048,
+      "end": 2052,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 4 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2052,
+      "end": 2068,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 4 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2068,
+      "end": 2076,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 4 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 2076,
+      "end": 2108,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 4 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2108,
+      "end": 2109,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 4 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2109,
+      "end": 2155,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 4 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2155,
+      "end": 2156,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 4 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2156,
+      "end": 2220,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 4 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2220,
+      "end": 2224,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 4 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2224,
+      "end": 2236,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 5 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2236,
+      "end": 2250,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 5 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 2250,
+      "end": 2252,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 5 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2252,
+      "end": 2256,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 5 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 2256,
+      "end": 2260,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 5 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2260,
+      "end": 2276,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 5 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2276,
+      "end": 2284,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 5 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 2284,
+      "end": 2316,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 5 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2316,
+      "end": 2317,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 5 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2317,
+      "end": 2363,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 5 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2363,
+      "end": 2364,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 5 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2364,
+      "end": 2428,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 5 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2428,
+      "end": 2432,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 5 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2432,
+      "end": 2444,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 6 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2444,
+      "end": 2458,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 6 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 2458,
+      "end": 2460,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 6 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2460,
+      "end": 2464,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 6 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 2464,
+      "end": 2468,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 6 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2468,
+      "end": 2484,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 6 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2484,
+      "end": 2492,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 6 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 2492,
+      "end": 2524,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 6 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2524,
+      "end": 2525,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 6 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2525,
+      "end": 2571,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 6 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2571,
+      "end": 2572,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 6 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2572,
+      "end": 2636,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 6 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2636,
+      "end": 2640,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 6 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2640,
+      "end": 2652,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Slot 7 Extended Stats (LUC & STM)",
+      "description": "LUC triplet (+0..+5) and STM triplet (+6..+B)",
+      "source": "docs/SO2-PARTY-MEMBER-INVESTIGATION.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2652,
+      "end": 2666,
+      "size": 14,
+      "status": "VERIFIED",
+      "name": "Slot 7 Equipment (7 Slots)",
+      "description": "7 x uint16 item IDs: weapon, armor, shield, helmet, greaves, acc1, acc2 (0x0000 = empty slot)",
+      "source": "docs/SAVE-FORMAT.md, Task BR empty-armor resolution"
+    },
+    {
+      "chunk": 3,
+      "start": 2666,
+      "end": 2668,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Slot 7 SP Capped Value",
+      "description": "Current available SP to spend (clamped 0..999)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2668,
+      "end": 2672,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 7 SP-to-Talent Alignment Padding",
+      "description": "4-byte structural zero padding aligning uint16 SP (+0x1A) to uint32 Talent Bitmask (+0x20); zeroed at init (0x8007A240) and verified 100% [0,0,0,0] across all saves",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, resident.asm 0x8007A240"
+    },
+    {
+      "chunk": 3,
+      "start": 2672,
+      "end": 2676,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 7 Talent Bitmask",
+      "description": "Low 10 bits indicate unlocked talents (Originality, Dexterity, etc.)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2676,
+      "end": 2692,
+      "size": 16,
+      "status": "VERIFIED",
+      "name": "Slot 7 Character Name",
+      "description": "Null-padded ASCII character name string (max 16 characters)",
+      "source": "docs/SAVE-FORMAT.md"
+    },
+    {
+      "chunk": 3,
+      "start": 2692,
+      "end": 2700,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Slot 7 Combat Stance & Tactical Configuration",
+      "description": "Combat stance (+0x34..+0x39), tactical configuration bitmask at +0x3A (bit 2 0x04 = Link Combo mode toggle 'LC ON'/'LC OFF' modified by KM menu overlay code-3004 0x80081B30..0x80081C3C, bit 0 0x01 = tactical behavior flag), and delimiter byte at +0x3B (0x00)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, code-3004.asm 0x80081B30..0x80081C3C"
+    },
+    {
+      "chunk": 3,
+      "start": 2700,
+      "end": 2732,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Slot 7 Known / Unlocked Ability Flags",
+      "description": "32 x uint8 boolean flags (0x01=learned, 0x00=unlearned) for Killer Moves (fighters) and Spells (mages), indexed by 1-based ability ID",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2732,
+      "end": 2733,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 7 Skill Table Delimiter",
+      "description": "Single null byte (0x00) delimiting ability flag array and specialty skill levels",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2733,
+      "end": 2779,
+      "size": 46,
+      "status": "VERIFIED",
+      "name": "Slot 7 Specialty Skill Levels",
+      "description": "46 uint8 skill levels (0..10) corresponding to all standard IC/combat skills (Mineralogy, Cooking, Knife, etc.)",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2779,
+      "end": 2780,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Slot 7 Proficiency Table Alignment Pad",
+      "description": "Single null byte (0x00) aligning the following uint16 proficiency array to 2-byte boundary",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2780,
+      "end": 2844,
+      "size": 64,
+      "status": "VERIFIED",
+      "name": "Slot 7 Ability Proficiencies & Spell Counters",
+      "description": "32 x uint16 little-endian usage counters (0..999) indexed by 1-based ability ID; Killer Move proficiency for fighters, spell cast count for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 3,
+      "start": 2844,
+      "end": 2848,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Slot 7 Equipped Killer Move Shortcuts",
+      "description": "4 x uint8 assigned ability IDs: Short-range L1 (+0xCC), Short-range R1 (+0xCD), Long-range L1 (+0xCE), Long-range R1 (+0xCF); all 0x00 for mages",
+      "source": "docs/SO2-CHUNK3-MAPPING.md, Task DF"
+    },
+    {
+      "chunk": 4,
+      "start": 2848,
+      "end": 4896,
+      "size": 2048,
+      "status": "VERIFIED",
+      "name": "Inventory Roster Array",
+      "description": "1,024 x uint16 item slots: bits 0..9 item ID, bits 10..14 count (max 20), bit 15 seen/new flag",
+      "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+    },
+    {
+      "chunk": 4,
+      "start": 4896,
+      "end": 4928,
+      "size": 32,
+      "status": "VERIFIED",
+      "name": "Recent Acquired Item IDs",
+      "description": "16 x uint16 tracking recent item acquisitions",
+      "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+    },
+    {
+      "chunk": 4,
+      "start": 4928,
+      "end": 4932,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Inventory Buffer Control Word",
+      "description": "Memory buffer allocation descriptor",
+      "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+    },
+    {
+      "chunk": 4,
+      "start": 4932,
+      "end": 5956,
+      "size": 1024,
+      "status": "VERIFIED",
+      "name": "Inventory Hash / Integrity Bytes",
+      "description": "Zeroed during save, recomputed on load via 0x8003C8A0",
+      "source": "entry-2998.bin 0x80081b84..0x80081b9c"
+    },
+    {
+      "chunk": 4,
+      "start": 5956,
+      "end": 5960,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Inventory Trailing Alignment",
+      "description": "Padding word to complete 0xC28 allocation",
+      "source": "docs/SO2-INVENTORY-ADD-INVESTIGATION.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5960,
+      "end": 5968,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Warp / Scene Transition Header",
+      "description": "Scene transition dispatch and return linkage parameters",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5968,
+      "end": 5980,
+      "size": 12,
+      "status": "VERIFIED",
+      "name": "Saved Location Coordinates",
+      "description": "Signed 32-bit world/dungeon entrance coordinates: X (+0), Y (+4), Z (+8)",
+      "source": "docs/SO2-MAP-LOCATION-CHECK.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5980,
+      "end": 5984,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Camera Elevation",
+      "description": "Sub-area camera angle and elevation offset",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5984,
+      "end": 5986,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Party Facing Angle",
+      "description": "Orientation angle (uint16)",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5986,
+      "end": 5988,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Psynard Mount Active Bank",
+      "description": "Selects active parked mount coordinate bank (0 or 1)",
+      "source": "docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5988,
+      "end": 5990,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Resource / Sequence Selector",
+      "description": "Field sequence and transition resource selector (signed int16, -1 sentinel)",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5990,
+      "end": 5992,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Saved Scene-View Parameter",
+      "description": "Signed halfword scene-view angle parameter (written at resident.asm 0x80054400, 0x80063A10; read at 0x80055830)",
+      "source": "resident.asm 0x80054400, 0x80055830, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5992,
+      "end": 5993,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Overworld Minimap View Mode",
+      "description": "Overworld minimap / radar / full map display mode (uint8 0..2 cyclic toggle; overworld.asm 0x800889A4..0x800889CC)",
+      "source": "overworld.asm 0x800889A4..0x800889CC, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5993,
+      "end": 5994,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Sub-Area Index",
+      "description": "Interior sub-area room index",
+      "source": "docs/SO2-MAP-LOCATION-CHECK.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5994,
+      "end": 5996,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Zero Alignment Halfword",
+      "description": "Zero-initialized alignment halfword (0x0000) preceding actor index (initialized at resident.asm 0x8005EC60)",
+      "source": "resident.asm 0x8005EC60, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5996,
+      "end": 5997,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Landmark / Area ID",
+      "description": "Current landmark index (0..193; e.g. Area 128 = Linga)",
+      "source": "docs/SO2-MAP-LOCATION-CHECK.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5997,
+      "end": 5998,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Controlled-Object / Leader Active Flag",
+      "description": "Leader object readiness flag (0 or 1; written at resident.asm 0x800540E8, 0x80054108; read at 0x800558BC)",
+      "source": "resident.asm 0x800540E8, 0x800558BC, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5998,
+      "end": 5999,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Scene Movement Lock Flag",
+      "description": "Cutscene / movement lock flag (written at resident.asm 0x8006378C, cleared at 0x80055878, tested at 0x8004C9D0)",
+      "source": "resident.asm 0x8006378C, 0x80055878, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 5999,
+      "end": 6000,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Pending Scene Action Trigger Flag",
+      "description": "Interactive field transition trigger flag (written at resident.asm 0x800525EC, cleared at 0x80054334)",
+      "source": "resident.asm 0x800525EC, 0x80054334, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6000,
+      "end": 6240,
+      "size": 240,
+      "status": "VERIFIED",
+      "name": "Character Name Table",
+      "description": "12 characters x 20 bytes each: saved character names and status display labels",
+      "source": "docs/SO2-CHUNK5-MAPPING.md, resident.asm 0x80055f78"
+    },
+    {
+      "chunk": 5,
+      "start": 6240,
+      "end": 6241,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Message Speed",
+      "description": "Text display speed (uint8 0..7, displayed 1..8 in options menu)",
+      "source": "docs/SO2-OPTIONS-MENU-INVESTIGATION.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6241,
+      "end": 6272,
+      "size": 31,
+      "status": "VERIFIED",
+      "name": "Field Scene Viewport & Camera State Registers",
+      "description": "Field camera parameters, viewpoint angle, and viewport scroll limits (initialized at resident.asm 0x80058FC0, 0x8005904C, 0x800590E4)",
+      "source": "resident.asm 0x80058FC0, 0x800590E4, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6272,
+      "end": 6273,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Area / Room Transition Target ID",
+      "description": "Target room/landmark entrance index (uint8; written at resident.asm 0x80059078, verified across saves 0x83..0xF6)",
+      "source": "resident.asm 0x80059078, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6273,
+      "end": 6292,
+      "size": 19,
+      "status": "VERIFIED",
+      "name": "Field Environment State Registers",
+      "description": "Field scene environment parameters and transition state scratch registers (resident.asm 0x80058FC0)",
+      "source": "resident.asm 0x80058FC0, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6292,
+      "end": 6302,
+      "size": 10,
+      "status": "VERIFIED",
+      "name": "Cutscene Progress & Event Dispatch Markers",
+      "description": "5 x uint16 scene cutscene progress IDs (written at resident.asm 0x80058FFC, 0x80059000, verified across saves)",
+      "source": "resident.asm 0x80058FC0, 0x80058FFC, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6302,
+      "end": 6344,
+      "size": 42,
+      "status": "VERIFIED",
+      "name": "Event Dispatch Scratch & Transition Registers",
+      "description": "Field event dispatch countdown scratch registers and transition parameters preceding clock snapshots (resident.asm 0x80058FC0)",
+      "source": "resident.asm 0x80058FC0, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6344,
+      "end": 6536,
+      "size": 192,
+      "status": "VERIFIED",
+      "name": "Game Clock Snapshots",
+      "description": "48 x uint32 clock snapshot timestamps recording in-game milestones",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6536,
+      "end": 6540,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Operational Milestone Parameter",
+      "description": "uint32 milestone parameter preceding completion counter (verified in real saves; resident.asm 0x80048C14)",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6540,
+      "end": 6544,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Completion Counter",
+      "description": "uint32 completion counter incremented when chunk-1 halfword +178 equals 1 (read/written at resident.asm 0x80048C30..0x80048C3C; script getter 0x8006776C)",
+      "source": "resident.asm 0x80048C30..0x80048C3C, 0x8006776C, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6544,
+      "end": 6546,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Script-Additive Counter",
+      "description": "uint16 script-additive counter (read at resident.asm 0x800676A0, 0x800676C4)",
+      "source": "resident.asm 0x80067688..0x800676CC, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6546,
+      "end": 6548,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Script RNG Test Attempt Counter",
+      "description": "uint16 attempt counter for script RNG tests (read/written at resident.asm 0x80066604, 0x80066614; script getter 0x800676E0)",
+      "source": "resident.asm 0x8006659C..0x80066618, 0x800676E0, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6548,
+      "end": 6550,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Script RNG Test Success Counter",
+      "description": "uint16 success counter for script RNG tests (read at resident.asm 0x80066630; script getter 0x800676FC)",
+      "source": "resident.asm 0x80066618..0x80066640, 0x800676FC, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6550,
+      "end": 6552,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Delivery Array Alignment Halfword",
+      "description": "Alignment halfword preceding 10-element pending delivery array (initialized at resident.asm 0x8005ED2C)",
+      "source": "resident.asm 0x8005ED2C, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6552,
+      "end": 6572,
+      "size": 20,
+      "status": "VERIFIED",
+      "name": "Pending Item Deliveries",
+      "description": "10 x uint16 slots tracking delayed item deliveries (e.g. publication royalties, forging)",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6572,
+      "end": 6574,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Menu Return Request Code",
+      "description": "Signed halfword menu request code (read at resident.asm 0x8003055C, 0x80050D0C; set at 0x80032180)",
+      "source": "resident.asm 0x8003055C, 0x80032180, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6574,
+      "end": 6576,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Menu Return Modifiers",
+      "description": "Two signed 8-bit menu modifiers (read at resident.asm 0x8004D47C, 0x8004D480)",
+      "source": "resident.asm 0x8004D47C, 0x8004D480, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6576,
+      "end": 6580,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Object-14 Saved X Coordinate",
+      "description": "Signed 32-bit X coordinate for persistent object 14 (written at resident.asm 0x80068320; read at 0x800557AC)",
+      "source": "resident.asm 0x800557AC, 0x80068320, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6580,
+      "end": 6600,
+      "size": 20,
+      "status": "VERIFIED",
+      "name": "Psynard Parked Coordinates",
+      "description": "Two saved XYZ banks: Bank 1 at 0x19B4/0x19D4/0x19B8, Bank 2 at 0x19BC/0x19D8/0x19C0",
+      "source": "docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6600,
+      "end": 6608,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Saved Active Party Character IDs",
+      "description": "8 x uint8 character IDs in current active party roster",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6608,
+      "end": 6609,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Menu Delivery Variant Selector",
+      "description": "Delivery variant mode byte (read at resident.asm 0x8004CC24, 0x8004E2B8, 0x80050280)",
+      "source": "resident.asm 0x8004CC24, 0x80050280, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6609,
+      "end": 6610,
+      "size": 1,
+      "status": "VERIFIED",
+      "name": "Delivery Variant Alignment Pad",
+      "description": "Structural alignment pad byte (verified 100% all-zeroes across saves)",
+      "source": "docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6610,
+      "end": 6612,
+      "size": 2,
+      "status": "VERIFIED",
+      "name": "Object-14 Saved Orientation",
+      "description": "Signed halfword orientation parameter for object 14 (read at resident.asm 0x800557D0; written at 0x80068344)",
+      "source": "resident.asm 0x800557D0, 0x80068344, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6612,
+      "end": 6620,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Psynard Parked Y Coordinates",
+      "description": "Signed 32-bit Y coordinates for Psynard parking bank 1 (0x19D4) and bank 2 (0x19D8) (written at resident.asm 0x8004C774, 0x8004C7A4; read at 0x80054454, 0x80055684)",
+      "source": "resident.asm 0x8004C774, 0x80054454, docs/SO2-DISC-AND-PSYNARD-CHECK.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6620,
+      "end": 6624,
+      "size": 4,
+      "status": "VERIFIED",
+      "name": "Deferred Delivery Clock Marker",
+      "description": "uint32 clock marker gating deferred delivery processing (written at resident.asm 0x80030580, 0x80050C20; read at 0x80030570, 0x8004CBE4)",
+      "source": "resident.asm 0x80030570..0x80030584, 0x8004CBE4, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6624,
+      "end": 6632,
+      "size": 8,
+      "status": "VERIFIED",
+      "name": "Object-14 Saved Y and Z Coordinates",
+      "description": "Signed 32-bit Y (0x19E0) and Z (0x19E4) coordinates for object 14 (written at resident.asm 0x8006832C, 0x80068338; read at 0x800557B8, 0x800557C4)",
+      "source": "resident.asm 0x800557B8..0x800557C4, 0x8006832C, docs/SO2-CHUNK5-MAPPING.md"
+    },
+    {
+      "chunk": 5,
+      "start": 6632,
+      "end": 7000,
+      "size": 368,
+      "status": "VERIFIED",
+      "name": "Global Story / Event Flag Bitfield",
+      "description": "368 bytes (2,944 flags) from live buffer G=[0x80075704]; read/set/clear via 0x80055ECC/0x80055EFC/0x80055F38. 346 individual flag bits now definitively resolved: 338 real treasure chests at flags 2400..2730 (0x1B14..0x1B3D, 42 bytes), Cross Cave altar cutscene flag 449 at 0x1A20, Precious/Key item flags 0x02B4..0x02E3 at 0x1A3E..0x1A44, and developer debug flags 0x02C8..0x02D7 at 0x1A41..0x1A42.",
+      "source": "docs/SO2-CHUNK5-MAPPING.md, artifacts/so2-objects/master_chest_database.json, tools/so2_chunk5_evidence.py"
+    },
+    {
+      "chunk": 5,
+      "start": 7000,
+      "end": 7048,
+      "size": 48,
+      "status": "VERIFIED",
+      "name": "Resource-E Trailing Buffer Padding",
+      "description": "48-byte trailing buffer padding beyond 0x410 active bytes of F and G; allocated via malloc(0x440) at resident.asm 0x800325F0; snapshot 0x80055FC8 and restore 0x8005EAA0 bounded strictly to 0x410; contains zero pad or heap residue",
+      "source": "resident.asm 0x800325F0, 0x80055FC8, 0x8005EAA0, docs/SO2-CHUNK5-MAPPING.md"
+    }
+  ]
+}
